@@ -9,8 +9,6 @@ library(readxl)
 library(data.table)
 library(extrafont)
 
-#setwd("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment")
-
 ### define theme & set x axis maximum
 ##################################################################################
 windowsFonts(Calibri = windowsFont("Calibri"))
@@ -36,10 +34,10 @@ rects$col <- ifelse(rects$col==-1, 'white', 'gray70')
 ### timeslices (needed for linear interpolations)
 
 ###import metadata
-PoolCap01_13_metadata <- fread("C:/Users/vcl943/Documents/Analysis/R/ngsLCA/metadata_files/PoolCap01_13_metadata.csv")
+PoolCap01_13_metadata <- fread("metadata_files/PoolCap01_13_metadata.csv")
 timeslices <- unique(PoolCap01_13_metadata$age_median)
 
-PoolScreen01_metadata <- fread("C:/Users/vcl943/Documents/Analysis/R/ngsLCA/metadata_files/PoolScreen01_metadata.csv")
+PoolScreen01_metadata <- fread("metadata_files/PoolScreen01_metadata.csv")
 PoolScreen01_metadata_red <- PoolScreen01_metadata %>% select(!sample_ID)
 
 
@@ -51,7 +49,7 @@ timeslices <- unique(all_metadata$age_median)
 ### air temp reconstruction based on Lecavalier et al. 2017
 ##################################################################################
 
-agassiz_temp_data <- read_excel("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/Temperature_Reconstruction.xlsx", sheet = "data_Lecavalier")
+agassiz_temp_data <- read_excel("Analysis/R/palaeoenvironment/Temperature_Reconstruction.xlsx", sheet = "data_Lecavalier")
 #adjust this number if necessary!
 
 #filter temp_data to younger than 11.66 ky BP
@@ -95,18 +93,18 @@ all_metadata$temp_interpol=temp_interpol$temp_interpol[match(all_metadata$age_me
 ### PALAEOPROXIES NORTH-EAST GREENLAND 
 
 ### NEG: foram data (Pados-Dibattista)
-DA17_st7_calc_form <- read_delim("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/Pados-Dibattista-etal_2021/datasets/DA17-NG-ST7-73G_calc_foram_modified.tab", 
+DA17_st7_calc_form <- read_delim("Analysis/R/palaeoenvironment/proxies/Pados-Dibattista-etal_2021/datasets/DA17-NG-ST7-73G_calc_foram_modified.tab", 
                         delim = "\t", escape_double = FALSE, trim_ws = TRUE)
 
 DA17_st7_calc_form <- DA17_st7_calc_form %>%
                       mutate(atl_forams = `C. neoteretis [#/g]`+ `P. bulloides [#/g]`)
 
 ### NEG: dinosterol brassicasterol (Brassicasterol & Dinosterol) PS093-025 (Syring et al 2020)
-sterol_data_PS93_025 <- read_delim("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/SyringN_2019/datasets/PS93-025_Steroles_edit.tab", 
+sterol_data_PS93_025 <- read_delim("Analysis/R/palaeoenvironment/proxies/SyringN_2019/datasets/PS93-025_Steroles_edit.tab", 
                             delim = "\t", escape_double = FALSE, trim_ws = TRUE)
 
 ### NEG: sterol sea ice reconstructions (IP25 & HBI III) PS93-025 (Syring et al 2020)
-ice_data_PS93_025 <- read_delim("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/SyringN_2019/datasets/PS93-025_HBI_edit.tab", 
+ice_data_PS93_025 <- read_delim("Analysis/R/palaeoenvironment/proxies/SyringN_2019/datasets/PS93-025_HBI_edit.tab", 
                                  delim = "\t", escape_double = FALSE, trim_ws = TRUE)
 
 ################################################################################
@@ -182,14 +180,14 @@ all_metadata$forams_interpol <- ifelse(all_metadata$core == "DA17_st7_73G", NEG_
 ### PALAEOPROXIES Melville Bay 
 
 ### Saini et al 2020: GeoB19927
-GeoB19927 <- read_delim("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/Saini-etal_2020/datasets/Saini-etal_2020_edit.tab", 
+GeoB19927 <- read_delim("Analysis/R/palaeoenvironment/proxies/Saini-etal_2020/datasets/Saini-etal_2020_edit.tab", 
                         delim = "\t", escape_double = FALSE, trim_ws = TRUE)
 
 #filter dataframe for NA rows
 GeoB19927_noNA <- filter(GeoB19927, !is.na(`IP25/TOC [µg/g]`))
 
 ### LK21st26 foram counts:
-st26_proxies <- read_excel("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/LK21-IC-st26-GC1_algae_counts.xlsx", sheet = "Foraminifera #")
+st26_proxies <- read_excel("Analysis/R/palaeoenvironment/proxies/LK21-IC-st26-GC1_algae_counts.xlsx", sheet = "Foraminifera #")
 st26_proxies <- subset(st26_proxies, select = c("median_age", "chilled_atl_forams/gram", "polar_arct_forams/gram"))
 st26_proxies <- filter(st26_proxies, median_age >0)
 st26_proxies <- mutate(st26_proxies, median_age = round(median_age/1000,1))
@@ -268,11 +266,11 @@ all_metadata$forams_interpol <- ifelse(all_metadata$core == "LK21_ICst26", MB_pr
 
 ### Detlef et al. 2023
 
-Ry19_12_detlef <- read_xlsx("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/oden-ryder-2019-sediment-detlef-lincoln-sea-1-2/biomarker-ryder19-12-GC1.xlsx")
+Ry19_12_detlef <- read_xlsx("Analysis/R/palaeoenvironment/proxies/oden-ryder-2019-sediment-detlef-lincoln-sea-1-2/biomarker-ryder19-12-GC1.xlsx")
 
 ### Jennings et al 2011: Ry19-12/Ry19-24
-jennings2011_forams <- read_xlsx("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/jennings2011/jennings2011.xlsx", sheet = "Forams")
-jennings2011_isotopes <- read_xlsx("C:/Users/vcl943/Documents/Analysis/R/palaeoenvironment/proxies/jennings2011/jennings2011.xlsx", sheet = "Cneoteretis_isotopes")
+jennings2011_forams <- read_xlsx("Analysis/R/palaeoenvironment/proxies/jennings2011/jennings2011.xlsx", sheet = "Forams")
+jennings2011_isotopes <- read_xlsx("Analysis/R/palaeoenvironment/proxies/jennings2011/jennings2011.xlsx", sheet = "Cneoteretis_isotopes")
 
 #################################################################################
 
