@@ -1,0 +1,1 @@
+Except for the file "LK21-IC-st26-GC1_algae_counts.xlsx", all datasets have been published previously and were downloaded from PANGAEA. If you want to use the data, you need to cite the original publications.
