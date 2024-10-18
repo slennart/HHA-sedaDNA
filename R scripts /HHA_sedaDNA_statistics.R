@@ -1,7 +1,6 @@
 
 library(tidyr)
 library(vegan)
-library(rioja)
 library(psych)
 library(ggpubr)
 library(ggord)
